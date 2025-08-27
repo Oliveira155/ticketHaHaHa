@@ -6,9 +6,9 @@ class Tickets(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="test", description="Testar um comando só")
+    @app_commands.command(name="ping", description="Latência do bot")
     async def test(self, interaction: discord.Interaction):
-        await interaction.response.send_message("Testado coe mao?", ephemeral=True)
+        await interaction.response.send_message(f"⭐・Minha latência de ping está atualmente: **{self.bot.latency*1000:.0f}ms**", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Tickets(bot))
