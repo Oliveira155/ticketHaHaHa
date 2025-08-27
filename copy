@@ -1,0 +1,4 @@
+Set-Alias olv .\git-commit-push.ps1
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+olv "v0.0.4 - " 
