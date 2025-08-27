@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from config import DISCORD_TOKEN
-from modulos.database import init_db, carregou_db
+from modulos.database import init_db
 
 init_db()
 
@@ -10,7 +10,7 @@ TOKEN = DISCORD_TOKEN
 
 #-------------
 # mudar pra false quando não estiver em dev
-emDesenvolvimento = True
+emDesenvolvimento = False
 serverDev = 1033558614117453904
 
 #-------------
@@ -31,13 +31,12 @@ async def load_extensions():
 @bot.event
 async def on_ready():
     await load_extensions()
-    if emDesenvolvimento:
+    if emDesenvolvimento == True:
         guildSync = discord.Object(id=serverDev)
         await bot.tree.sync(guild=guildSync)
     else:
         await bot.tree.sync()
 
-    carregou_db()
     print(f"Carregando Slash commands..")
     print("------------------------------------------")
     print(f"Conectado como {bot.user}!")
