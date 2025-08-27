@@ -76,6 +76,7 @@ class DatabaseConfig(commands.Cog):
             await interaction.response.send_message("❌ Nenhuma configuração encontrada.", ephemeral=True)
             return
 
+
         guild_id, log_id, bemvindo_id, ticket_id, autorole_id, sugestao_id = config
 
         # converte IDs de canal para menção, se existirem
@@ -85,8 +86,10 @@ class DatabaseConfig(commands.Cog):
         autorole_mention = f"<#{autorole_id}>" if autorole_id else "Não configurado"
         sugestao_mention = f"<#{sugestao_id}>" if sugestao_id else "Não configurado"
 
+        #convertidos - colocar isso em embed depois
         mensagem = (
             f"# 📋 Configurações do servidor:\n"
+            f"> 🔹 ID do Servidor: {guild_id}\n"
             f"> 🔹 Canal de log: {log_mention}\n"
             f"> 🔹 Canal de boas-vindas: {bemvindo_mention}\n"
             f"> 🔹 Canal de tickets: {ticket_mention}\n"
