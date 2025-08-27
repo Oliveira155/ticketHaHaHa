@@ -1,6 +1,8 @@
 import os
 import discord
 
+# ------------------ /  T  /  -------------------
+
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
