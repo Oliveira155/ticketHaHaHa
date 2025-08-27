@@ -14,16 +14,16 @@ jobs:
           curl -H "Content-Type: application/json" \
           -d '{
             "embeds": [{
-              "title": "📌 Atualização",
-              "description": "Modificação feita por ${{ github.actor }}",
+              "title": "📢 Changelogs",
+              "description": "**${{ github.actor }}**",
               "color": 5814783,
               "fields": [
                 {
-                  "name": "Comentários",
+                  "name": "📝 Versão atualizada",
                   "value": "${{ github.event.head_commit.message }}"
                 },
                 {
-                  "name": "Commit",
+                  "name": "🔗 Commit",
                   "value": "${{ github.event.head_commit.url }}"
                 }
               ]
