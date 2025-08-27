@@ -14,20 +14,16 @@ jobs:
           curl -H "Content-Type: application/json" \
           -d '{
             "embeds": [{
-              "title": "📌 Novo Commit no GitHub",
-              "description": "Um push foi feito pelo usuário ${{ github.actor }}",
+              "title": "📌 Atualização",
+              "description": "Modificação feita por ${{ github.actor }}",
               "color": 5814783,
               "fields": [
                 {
-                  "name": "Mensagem do Commit",
+                  "name": "Comentários",
                   "value": "${{ github.event.head_commit.message }}"
                 },
                 {
-                  "name": "Branch",
-                  "value": "${{ github.ref }}"
-                },
-                {
-                  "name": "Link do Commit",
+                  "name": "Commit",
                   "value": "${{ github.event.head_commit.url }}"
                 }
               ]
