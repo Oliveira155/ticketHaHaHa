@@ -5,6 +5,9 @@ import sqlite3
 
 DB_PATH = "guilds.db"
 
+def carregou_db():
+    return print("Banco de dados carregado.")
+
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -19,7 +22,6 @@ def init_db():
             suggestion_channel INTEGER
         )
     """)
-    print("Banco de dados carregados.")
     conn.commit()
     conn.close()
 

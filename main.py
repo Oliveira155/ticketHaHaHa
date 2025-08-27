@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from config import DISCORD_TOKEN
-from modulos.database import init_db
+from modulos.database import init_db, carregou_db
 
 init_db()
 
@@ -20,12 +20,13 @@ intents.message_content = True
 bot = commands.Bot(command_prefix=".", intents=intents)
 
 async def load_extensions():
-    print("\n\n\n\n\n\n\n")
-    print("Carregando Módulos..")
+    print("\n" * 15)
+    print("------------------------------------------")
+    print("Carregando Módulos..\n")
     for filename in os.listdir("./modulos"):
         if filename.endswith(".py"):
             await bot.load_extension(f"modulos.{filename[:-3]}")
-            print(f"Módulo '{filename[:-3]}' carregado")
+            print(f"Módulo '{filename[:-3]}' carregado!")
 
 @bot.event
 async def on_ready():
@@ -36,7 +37,9 @@ async def on_ready():
     else:
         await bot.tree.sync()
 
+    carregou_db()
     print(f"Carregando Slash commands..")
-    print(f"Conectando como {bot.user}..")
+    print("------------------------------------------")
+    print(f"Conectado como {bot.user}!")
 
 bot.run(TOKEN)
