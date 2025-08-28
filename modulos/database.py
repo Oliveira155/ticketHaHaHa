@@ -26,7 +26,7 @@ def init_db():
     conn.close()
 
 def set_config(guild_id, log=None, bemvindo=None, ticket=None, autorole=None, sugestao=None):
-    with db_lock:  # bloqueia para evitar concorrência
+    with db_lock:  # bloqueia para evitar concorrência ..
         with sqlite3.connect(DB_PATH, timeout=5) as conn:
             c = conn.cursor()
 
