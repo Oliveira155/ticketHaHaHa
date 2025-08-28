@@ -39,7 +39,8 @@ async def on_ready():
     else:
         await bot.tree.sync()
 
-    print(f"Carregando Slash commands..")
+    print(f"Banco de dados carregado!")
+    print(f"Carregado Slash commands!")
     print("------------------------------------------")
     print(f"Conectado como {bot.user}!")
 
