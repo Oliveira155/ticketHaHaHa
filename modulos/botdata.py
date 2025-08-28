@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import sqlite3
 from functools import wraps
+from imagens import get_image
 
 founderID = 773266869574434836
 BOT_DB_PATH = "botdata.db"

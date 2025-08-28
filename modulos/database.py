@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import sqlite3
 import threading
+from imagens import get_image
 
 DB_PATH = "guilds.db"
 db_lock = threading.Lock()

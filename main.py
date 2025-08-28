@@ -4,6 +4,7 @@ import os
 from config import DISCORD_TOKEN
 from modulos.database import init_db
 from modulos.botdata import init_bot_db
+from imagens import get_image
 
 init_db()
 init_bot_db()

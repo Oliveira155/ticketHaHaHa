@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+from imagens import get_image
 
 class Tickets(commands.Cog):
     def __init__(self, bot):
