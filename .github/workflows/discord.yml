@@ -3,7 +3,7 @@ name: Notificar Discord
 on:
   push:
     branches:
-      - main
+      - oliveira
 
 jobs:
   notify:
