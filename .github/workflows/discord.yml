@@ -28,10 +28,6 @@ jobs:
                 {
                   "name": "📝 Versão atualizada",
                   "value": "> ${{ github.event.head_commit.message }}"
-                },
-                {
-                  "name": "🔗 Commit",
-                  "value": "> ${{ github.event.head_commit.url }}"
                 }
               ]
             }]
