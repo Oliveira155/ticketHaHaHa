@@ -66,16 +66,31 @@ class DatabaseConfig(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="canalticket", description="Definir o canal onde vão clicar para abrir os tickets")
-    async def ticket(self, interaction: discord.Interaction, channel: discord.TextChannel):
-        set_config(interaction.guild.id, ticket=channel.id)
-        await interaction.response.send_message(f"✅・Canal de ticket configurado com sucesso.", ephemeral=True)
+    @app_commands.command(name="configurar", description="Definir as configurações do bot no servidor")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def configurar(self, interaction: discord.Interaction,
+        cargodebemvindo: discord.Role=None,
+        canalticket: discord.TextChannel=None,
+        canalregistro: discord.TextChannel=None,
+        canalbemvindo: discord.TextChannel=None,
+        canalsugestao: discord.TextChannel=None):
+        if not any([cargodebemvindo, canalticket, canalregistro, canalbemvindo, canalsugestao]):
+            await interaction.response.send_message("<:bloqueio:1410436751427899563>・Insira os argumentos para mudar as configurações.", ephemeral=True)
+            return
+        
+        set_config(interaction.guild.id,
+            autorole=cargodebemvindo.id if cargodebemvindo else None,
+            ticket=canalticket.id if canalticket else None,
+            log=canalregistro.id if canalregistro else None,
+            bemvindo=canalbemvindo.id if canalbemvindo else None,
+            sugestao=canalsugestao.id if canalsugestao else None)
+        await interaction.response.send_message(f"<:verificado:1410436717445644399>・Configuração atualizada com sucesso.", ephemeral=True)
 
     @app_commands.command(name="configs", description="Ver as configurações setadas neste servidor.")
     async def configs(self, interaction: discord.Interaction):
         config = get_config(interaction.guild.id)
         if not config:
-            await interaction.response.send_message("❌ Nenhuma configuração encontrada.", ephemeral=True)
+            await interaction.response.send_message("<:bloqueio:1410436751427899563>・Nenhuma configuração encontrada.", ephemeral=True)
             return
 
 
@@ -85,17 +100,17 @@ class DatabaseConfig(commands.Cog):
         log_mention = f"<:verificado:1410436717445644399> <#{log_id}>" if log_id else "<:alert:1410743945063043255> ``N/C``"
         bemvindo_mention = f"<:verificado:1410436717445644399> <#{bemvindo_id}>" if bemvindo_id else "<:alert:1410743945063043255> ``N/C``"
         ticket_mention = f"<:verificado:1410436717445644399> <#{ticket_id}>" if ticket_id else "<:alert:1410743945063043255> ``N/C``"
-        autorole_mention = f"<:verificado:1410436717445644399> <#{autorole_id}>" if autorole_id else "<:alert:1410743945063043255> ``N/C``"
+        autorole_mention = f"<:verificado:1410436717445644399> <@{autorole_id}>" if autorole_id else "<:alert:1410743945063043255> ``N/C``"
         sugestao_mention = f"<:verificado:1410436717445644399> <#{sugestao_id}>" if sugestao_id else "<:alert:1410743945063043255> ``N/C``"
 
         embedConfigs=discord.Embed(title=f"<:admin:1410436795178553464> {interaction.guild.name}", description="", color=0xFFFFFF)
         #embedConfigs.add_field(name="<:adminazul:1410436787452510260> ID do Servidor", value=guild_id, inline=True)
-        embedConfigs.add_field(name="<:membro:1410744041506869278> Dono do Servidor", value=f"<:verificado:1410436717445644399> <@{interaction.guild.owner_id}>", inline=True)
-        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Bem-vindo", value=bemvindo_mention, inline=True)
-        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Bem-vindo", value=autorole_mention, inline=True)
-        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Tickets", value=ticket_mention, inline=True)
-        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Sugestões", value=sugestao_mention, inline=True)
-        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Registros", value=log_mention, inline=True)
+        embedConfigs.add_field(name="<:membro:1410744041506869278> Dono do Servidor", value=f"<:verificado:1410436717445644399> <@{interaction.guild.owner_id}>", inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Bem-vindo", value=bemvindo_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Bem-vindo", value=autorole_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Tickets", value=ticket_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Sugestões", value=sugestao_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Registros", value=log_mention, inline=False)
         embedConfigs.set_thumbnail(url=interaction.guild.icon.url if interaction.guild.icon else None)
         embedConfigs.set_footer(text="Todos os direitos reservados", icon_url=interaction.user.avatar.url if interaction.user.avatar else interaction.user.default_avatar.url)
         embedConfigs.timestamp = datetime.utcnow()
