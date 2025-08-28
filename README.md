@@ -1,2 +1,2 @@
 # ticketHaHaHa
-Um bot completo de suporte, bilhete e moderação para o discord.
+Um bot completo de suporte, ticket e moderação para o discord.
