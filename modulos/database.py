@@ -4,6 +4,7 @@ from discord.ext import commands
 import sqlite3
 import threading
 from imagens import get_image
+from datetime import datetime
 
 DB_PATH = "guilds.db"
 db_lock = threading.Lock()
@@ -81,24 +82,25 @@ class DatabaseConfig(commands.Cog):
         guild_id, log_id, bemvindo_id, ticket_id, autorole_id, sugestao_id = config
 
         # converte IDs de canal para menção, se existirem
-        log_mention = f"<#{log_id}>" if log_id else "Não configurado"
-        bemvindo_mention = f"<#{bemvindo_id}>" if bemvindo_id else "Não configurado"
-        ticket_mention = f"<#{ticket_id}>" if ticket_id else "Não configurado"
-        autorole_mention = f"<#{autorole_id}>" if autorole_id else "Não configurado"
-        sugestao_mention = f"<#{sugestao_id}>" if sugestao_id else "Não configurado"
+        log_mention = f"<:verificado:1410436717445644399> <#{log_id}>" if log_id else "<:alert:1410743945063043255> ``N/C``"
+        bemvindo_mention = f"<:verificado:1410436717445644399> <#{bemvindo_id}>" if bemvindo_id else "<:alert:1410743945063043255> ``N/C``"
+        ticket_mention = f"<:verificado:1410436717445644399> <#{ticket_id}>" if ticket_id else "<:alert:1410743945063043255> ``N/C``"
+        autorole_mention = f"<:verificado:1410436717445644399> <#{autorole_id}>" if autorole_id else "<:alert:1410743945063043255> ``N/C``"
+        sugestao_mention = f"<:verificado:1410436717445644399> <#{sugestao_id}>" if sugestao_id else "<:alert:1410743945063043255> ``N/C``"
 
-        #convertidos - colocar isso em embed depois
-        mensagem = (
-            f"# 📋 Configurações do servidor:\n"
-            f"> 🔹 ID do Servidor: {guild_id}\n"
-            f"> 🔹 Canal de log: {log_mention}\n"
-            f"> 🔹 Canal de boas-vindas: {bemvindo_mention}\n"
-            f"> 🔹 Canal de tickets: {ticket_mention}\n"
-            f"> 🔹 Canal de sugestões: {sugestao_mention}\n"
-            f"> 🔹 Cargo de autorole: {autorole_mention}"
-        )
+        embedConfigs=discord.Embed(title=f"<:admin:1410436795178553464> {interaction.guild.name}", description="", color=0xFFFFFF)
+        #embedConfigs.add_field(name="<:adminazul:1410436787452510260> ID do Servidor", value=guild_id, inline=True)
+        embedConfigs.add_field(name="<:membro:1410744041506869278> Dono do Servidor", value=f"<:verificado:1410436717445644399> <@{interaction.guild.owner_id}>", inline=True)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Bem-vindo", value=bemvindo_mention, inline=True)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Bem-vindo", value=autorole_mention, inline=True)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Tickets", value=ticket_mention, inline=True)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Sugestões", value=sugestao_mention, inline=True)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Registros", value=log_mention, inline=True)
+        embedConfigs.set_thumbnail(url=interaction.guild.icon.url if interaction.guild.icon else None)
+        embedConfigs.set_footer(text="Todos os direitos reservados", icon_url=interaction.user.avatar.url if interaction.user.avatar else interaction.user.default_avatar.url)
+        embedConfigs.timestamp = datetime.utcnow()
 
-        await interaction.response.send_message(mensagem, ephemeral=True)
+        await interaction.response.send_message(embed=embedConfigs, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(DatabaseConfig(bot))
