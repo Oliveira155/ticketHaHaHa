@@ -1,6 +1,5 @@
 config.py
 __pycache__/
-*.pyc
 botdata.db
 guilds.db
 git-auto.ps1
