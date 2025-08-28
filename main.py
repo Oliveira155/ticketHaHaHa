@@ -3,8 +3,10 @@ from discord.ext import commands
 import os
 from config import DISCORD_TOKEN
 from modulos.database import init_db
+from modulos.botdata import init_bot_db
 
 init_db()
+init_bot_db()
 
 TOKEN = DISCORD_TOKEN
 
