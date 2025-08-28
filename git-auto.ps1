@@ -8,10 +8,7 @@ git add .
 # Faz o commit com a mensagem passada como parâmetro
 git commit -m $message
 
-# Descobre o branch atual
-$branch = git rev-parse --abbrev-ref HEAD
-
 # Faz push pro branch atual
-git push origin $branch
+git push origin oliveira
 
-Write-Host "✅ Commit e push concluídos no branch $branch!"
+Write-Host "---- Atualização feita!"
