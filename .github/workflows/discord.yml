@@ -16,7 +16,7 @@ jobs:
             "embeds": [{
               "title": "📢 Changelogs",
               "description": "",
-              "color": 6710918,
+              "color": 3066993,
               "fields": [
                 {
                   "name": "⭐ Autor",
