@@ -17,6 +17,8 @@ jobs:
               "title": "📢 Changelogs",
               "description": "",
               "color": 3066993,
+              \"thumbnail\": {\"url\": \"https://media.discordapp.net/attachments/1405539658242195456/1410440115343593513/concluido.gif?ex=68b10638&is=68afb4b8&hm=328315e872e4d05e262df0830b85a75f61552b375476cf56fa862151c9d6a1ab&=\"},
+              \"image\": {\"url\": \"https://media.discordapp.net/attachments/1405539658242195456/1410440115343593513/concluido.gif?ex=68b10638&is=68afb4b8&hm=328315e872e4d05e262df0830b85a75f61552b375476cf56fa862151c9d6a1ab&=\"},
               "fields": [
                 {
                   "name": "⭐ Autor",
