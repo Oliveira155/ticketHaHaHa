@@ -2,3 +2,6 @@ config.py
 __pycache__/
 *.pyc
 .github/workflows/
+botdata.db
+guilds.db
+git-auto.ps1
