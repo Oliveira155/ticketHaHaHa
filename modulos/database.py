@@ -96,6 +96,22 @@ class DatabaseConfig(commands.Cog):
 
         guild_id, log_id, bemvindo_id, ticket_id, autorole_id, sugestao_id = config
 
+        logLink = f"https://discord.com/channels/{interaction.guild.id}/{log_id}"
+        bemvindoLink = f"https://discord.com/channels/{interaction.guild.id}/{bemvindo_id}"
+        ticketLink = f"https://discord.com/channels/{interaction.guild.id}/{ticket_id}"
+        sugestaoLink = f"https://discord.com/channels/{interaction.guild.id}/{sugestao_id}"
+
+        botaoLink1 = discord.ui.Button(label="Canal LOG", url=logLink, style=discord.ButtonStyle.link, emoji="<:canaldiscord:1410436772231385169>")
+        botaoLink2 = discord.ui.Button(label="Canal Bem-vindo", url=bemvindoLink, style=discord.ButtonStyle.link, emoji="<:canaldiscord:1410436772231385169>")
+        botaoLink3 = discord.ui.Button(label="Canal Ticket", url=ticketLink, style=discord.ButtonStyle.link, emoji="<:canaldiscord:1410436772231385169>")
+        botaoLink4 = discord.ui.Button(label="Canal Sugestão", url=sugestaoLink, style=discord.ButtonStyle.link, emoji="<:canaldiscord:1410436772231385169>")
+
+        viewBotaoLinks = discord.ui.View()
+        viewBotaoLinks.add_item(botaoLink1)
+        viewBotaoLinks.add_item(botaoLink2)
+        viewBotaoLinks.add_item(botaoLink3)
+        viewBotaoLinks.add_item(botaoLink4)
+
         # converte IDs de canal para menção, se existirem
         log_mention = f"<:verificado:1410436717445644399> <#{log_id}>" if log_id else "<:alert:1410743945063043255> ``N/C``"
         bemvindo_mention = f"<:verificado:1410436717445644399> <#{bemvindo_id}>" if bemvindo_id else "<:alert:1410743945063043255> ``N/C``"
@@ -115,7 +131,7 @@ class DatabaseConfig(commands.Cog):
         embedConfigs.set_footer(text="Todos os direitos reservados", icon_url=interaction.user.avatar.url if interaction.user.avatar else interaction.user.default_avatar.url)
         embedConfigs.timestamp = datetime.utcnow()
 
-        await interaction.response.send_message(embed=embedConfigs, ephemeral=True)
+        await interaction.response.send_message(embed=embedConfigs, view=viewBotaoLinks, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(DatabaseConfig(bot))
