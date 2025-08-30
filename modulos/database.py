@@ -20,13 +20,15 @@ def init_db():
             bemvindo_channel INTEGER,
             ticket_channel INTEGER,
             autorole_id INTEGER,
-            suggestion_channel INTEGER
+            suggestion_channel INTEGER,
+            role_atendente INTEGER,
+            role_respvenda INTEGER
         )
     """)
     conn.commit()
     conn.close()
 
-def set_config(guild_id, log=None, bemvindo=None, ticket=None, autorole=None, sugestao=None):
+def set_config(guild_id, log=None, bemvindo=None, ticket=None, autorole=None, sugestao=None, cargoatendente=None, respvenda=None):
     with db_lock:  # bloqueia para evitar concorrência ..
         with sqlite3.connect(DB_PATH, timeout=5) as conn:
             c = conn.cursor()
@@ -40,17 +42,19 @@ def set_config(guild_id, log=None, bemvindo=None, ticket=None, autorole=None, su
                 ticket = ticket if ticket is not None else current[3]
                 autorole = autorole if autorole is not None else current[4]
                 sugestao = sugestao if sugestao is not None else current[5]
+                cargoatendente = cargoatendente if cargoatendente is not None else current[6]
+                respvenda = respvenda if respvenda is not None else current[7]
 
                 c.execute("""
                 UPDATE guild_config
-                SET log_channel=?, bemvindo_channel=?, ticket_channel=?, autorole_id=?, suggestion_channel=?
+                SET log_channel=?, bemvindo_channel=?, ticket_channel=?, autorole_id=?, suggestion_channel=?, role_atendente=?, role_respvenda=?
                 WHERE guild_id=?
-                """, (log, bemvindo, ticket, autorole, sugestao, guild_id))
+                """, (log, bemvindo, ticket, autorole, sugestao, cargoatendente, respvenda, guild_id))
             else:
                 c.execute("""
-                INSERT INTO guild_config (guild_id, log_channel, bemvindo_channel, ticket_channel, autorole_id, suggestion_channel)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """, (guild_id, log, bemvindo, ticket, autorole, sugestao))
+                INSERT INTO guild_config (guild_id, log_channel, bemvindo_channel, ticket_channel, autorole_id, suggestion_channel, role_atendente, role_respvenda)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (guild_id, log, bemvindo, ticket, autorole, sugestao, cargoatendente, respvenda))
 
             conn.commit()
 
@@ -73,8 +77,10 @@ class DatabaseConfig(commands.Cog):
         canalticket: discord.TextChannel=None,
         canalregistro: discord.TextChannel=None,
         canalbemvindo: discord.TextChannel=None,
-        canalsugestao: discord.TextChannel=None):
-        if not any([cargodebemvindo, canalticket, canalregistro, canalbemvindo, canalsugestao]):
+        canalsugestao: discord.TextChannel=None,
+        cargoatendentes: discord.Role=None,
+        cargorespvenda: discord.Role=None):
+        if not any([cargodebemvindo, canalticket, canalregistro, canalbemvindo, canalsugestao, cargoatendentes, cargorespvenda]):
             await interaction.response.send_message("<:bloqueio:1410436751427899563>・Insira os argumentos para mudar as configurações.", ephemeral=True)
             return
         
@@ -83,7 +89,9 @@ class DatabaseConfig(commands.Cog):
             ticket=canalticket.id if canalticket else None,
             log=canalregistro.id if canalregistro else None,
             bemvindo=canalbemvindo.id if canalbemvindo else None,
-            sugestao=canalsugestao.id if canalsugestao else None)
+            sugestao=canalsugestao.id if canalsugestao else None,
+            cargoatendente=cargoatendentes.id if cargoatendentes else None,
+            respvenda=cargorespvenda.id if cargorespvenda else None)
         await interaction.response.send_message(f"<:verificado:1410436717445644399>・Configuração atualizada com sucesso.", ephemeral=True)
 
     @app_commands.command(name="configs", description="Ver as configurações setadas neste servidor.")
@@ -94,7 +102,7 @@ class DatabaseConfig(commands.Cog):
             return
 
 
-        guild_id, log_id, bemvindo_id, ticket_id, autorole_id, sugestao_id = config
+        guild_id, log_id, bemvindo_id, ticket_id, autorole_id, sugestao_id, atendente_id, respvenda_id = config
 
         logLink = f"https://discord.com/channels/{interaction.guild.id}/{log_id}"
         bemvindoLink = f"https://discord.com/channels/{interaction.guild.id}/{bemvindo_id}"
@@ -117,6 +125,8 @@ class DatabaseConfig(commands.Cog):
         bemvindo_mention = f"<:verificado:1410436717445644399> <#{bemvindo_id}>" if bemvindo_id else "<:alert:1410743945063043255> ``N/C``"
         ticket_mention = f"<:verificado:1410436717445644399> <#{ticket_id}>" if ticket_id else "<:alert:1410743945063043255> ``N/C``"
         autorole_mention = f"<:verificado:1410436717445644399> <@{autorole_id}>" if autorole_id else "<:alert:1410743945063043255> ``N/C``"
+        atendente_mention = f"<:verificado:1410436717445644399> <@{atendente_id}>" if atendente_id else "<:alert:1410743945063043255> ``N/C``"
+        respvenda_mention = f"<:verificado:1410436717445644399> <@{respvenda_id}>" if respvenda_id else "<:alert:1410743945063043255> ``N/C``"
         sugestao_mention = f"<:verificado:1410436717445644399> <#{sugestao_id}>" if sugestao_id else "<:alert:1410743945063043255> ``N/C``"
 
         embedConfigs=discord.Embed(title=f"<:admin:1410436795178553464> {interaction.guild.name}", description="", color=0xFFFFFF)
@@ -124,6 +134,8 @@ class DatabaseConfig(commands.Cog):
         embedConfigs.add_field(name="<:membro:1410744041506869278> Dono do Servidor", value=f"<:verificado:1410436717445644399> <@{interaction.guild.owner_id}>", inline=False)
         embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Bem-vindo", value=bemvindo_mention, inline=False)
         embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Bem-vindo", value=autorole_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Atendente", value=atendente_mention, inline=False)
+        embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Cargo Equipe Vendas", value=respvenda_mention, inline=False)
         embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Tickets", value=ticket_mention, inline=False)
         embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Sugestões", value=sugestao_mention, inline=False)
         embedConfigs.add_field(name="<:canaldiscord:1410436772231385169> Canal Registros", value=log_mention, inline=False)

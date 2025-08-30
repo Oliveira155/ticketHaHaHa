@@ -61,7 +61,6 @@ class SugestaoView(discord.ui.View):
 
                 botaoLink1 = discord.ui.Button(label="Ir ao Canal", url=sugestaoLink, style=discord.ButtonStyle.link, emoji="<:canaldiscord:1410436772231385169>")
 
-
                 embedAceita = discord.Embed(title="🎉 Sugestão aceita!", description="Sua sugestão foi aceita! Obrigado por contribuir com ideias para melhorar o servidor. Sua opinião é muito importante para a comunidade!", color=0xaaffff)
                 embedAceita.set_author(name=interaction.user.name, icon_url=interaction.user.avatar.url if interaction.user.avatar else interaction.user.default_avatar.url)
                 embedAceita.set_footer(text=interaction.guild.name)

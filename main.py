@@ -6,6 +6,7 @@ from config import DISCORD_TOKEN
 from modulos.database import init_db
 from modulos.botdata import init_bot_db
 from imagens import get_image
+from modulos.tickets import ensure_setup_message, get_config, TicketSetupView
 
 init_db()
 init_bot_db()
@@ -31,6 +32,17 @@ async def load_extensions():
         if filename.endswith(".py"):
             await bot.load_extension(f"modulos.{filename[:-3]}")
             print(f"Módulo '{filename[:-3]}' carregado!")
+
+    for guild in bot.guilds:
+            configSQL = get_config(guild.id)
+            if not configSQL:
+                continue
+            canalTicket = bot.get_channel(configSQL[3]) or await bot.fetch_channel(configSQL[3])
+            if canalTicket is None:
+                continue
+
+            await ensure_setup_message(bot, canalTicket)
+            bot.add_view(TicketSetupView())
 
 @bot.event
 async def on_ready():
